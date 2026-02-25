@@ -1,30 +1,20 @@
-import React, { useState } from 'react';
-import './App.css';
+import { useState, useEffect } from "react";
+import Dashboard from "./pages/Dashboard";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  const submit = (e) => {
-    e.preventDefault();
-    console.log({ name, email, password });
-    alert("Регистрация прошла успешно!");
-    setName('');
-    setEmail('');
-    setPassword('');
-  };
+  useEffect(() => {
+    // проверяем токен при загрузке
+    const token = localStorage.getItem("token");
+    if (token) setLoggedIn(true);
+  }, []);
 
-  return (
-    <div className="App">
-      <form onSubmit={submit}>
-        <h1>Регистрация</h1>
-        <input type="text" placeholder="Имя" value={name} onChange={e => setName(e.target.value)} required />
-        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Пароль" value={password} onChange={e => setPassword(e.target.value)} required />
-        <button type="submit">Зарегистрироваться</button>
-      </form>
-    </div>
+  return loggedIn ? (
+    <Dashboard />
+  ) : (
+    <AuthPage onLogin={() => setLoggedIn(true)} />
   );
 }
 

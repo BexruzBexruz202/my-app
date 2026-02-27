@@ -1,21 +1,41 @@
-import { deleteProduct } from "../services/api";
+import { useEffect, useState } from "react";
+import "./Product.css";
+const ProductList = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function ProductList({ products, refresh }) {
-  const handleDelete = async (id) => {
-    await deleteProduct(id);
-    refresh();
-  };
+  useEffect(() => {
+    fetch("https://fakestoreapi.com/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else {
+          setProducts([]);
+        }
+      })
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <p>Loading products...</p>;
 
   return (
     <div>
       <h2>Products</h2>
-      {products.map((product) => (
-        <div key={product.id} style={{ border: "1px solid gray", margin: 10, padding: 10 }}>
-          <h4>{product.title}</h4>
-          <p>Price: ${product.price}</p>
-          <button onClick={() => handleDelete(product.id)}>Delete</button>
-        </div>
-      ))}
+      <div className="products-grid">
+        {products.length === 0 && <p>No products found.</p>}
+        {products.map((product) => (
+          <div key={product.id} className="product-card">
+            <img src={product.image} alt={product.title} />
+            <h4>{product.title}</h4>
+            <p className="price">${product.price}</p>
+            <p className="category">{product.category}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+};
+
+export default ProductList;

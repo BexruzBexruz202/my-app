@@ -5,7 +5,7 @@ export default function Users() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://fakestoreapi.com")
+    fetch("https://fakestoreapi.com/users")
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);

@@ -19,8 +19,8 @@ export default function Dashboard() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Очистка данных сессии
-    navigate("/login"); // 3. Переход на страницу логина
+    localStorage.removeItem("token");
+    navigate("./components/Login.jsx");
   };
 
   return (
